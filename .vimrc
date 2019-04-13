@@ -65,7 +65,7 @@ au BufRead,BufNewFile *.s set filetype=nasm
 " My mappings
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <silent> <leader>l :LinuxCodingStyle<cr>
-map <C-n> :NERDTreeToggle<CR>
+map <F9> :NERDTreeToggle<CR>
 " Back and forward in tags
 map <M-Left> <C-T>
 map <M-Right> <C-]>
