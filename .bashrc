@@ -144,6 +144,7 @@ fi
       export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
     fi
 
+#path variable
 export PATH=~/bin:$PATH
 
 function cgrep()
@@ -198,10 +199,7 @@ function fixup()
     EDITOR=true git commit --fixup $1 && git rebase -i $1~ --autosquash
 }
 
-alias gsr='git --no-pager show -s --abbrev-commit --abbrev=12 --pretty=format:"%h (\"%s\")%n"'
-alias cdw='cd ~/dev'
 alias groot='cd $(git root)'
-alias cat='bat'
 alias cscope_create='find . -name "*.[csh]" >> cscope.files;cscope -b -q'
 alias cscope_create_kernel='find . -name "*.[csh]" >> cscope.files;cscope -b -q -k'
 alias download='curl -O -J -L'
@@ -209,3 +207,102 @@ alias download='curl -O -J -L'
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 alias whatsmyip='curl -s http://whatismyip.akamai.com/'
 alias apt-upgrade='sudo apt-get update && sudo apt-get upgrade --yes  && sudo apt-get auto-remove'
+
+
+#git aliases
+alias gis='git status '
+alias gia='git add '
+alias gib='git branch '
+alias gic='git commit -s -m'
+alias gid='git diff'
+alias gidc='git diff --cached'
+alias gco='git checkout '
+#alias gil="git log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
+alias gil="git log --pretty=format:'%h %ad | %s%d [%an]' --date=short"
+#alias gig="git push aosp HEAD:refs/for/communitake"
+alias gica='git commit --amend'
+alias gir='git rebase -i'
+alias girc='git rebase --continue'
+
+#checkpatch
+alias chk='~/bin/checkpatch.pl --notree'
+
+
+#inner func to be used as ssh alias skeleton
+function ssh_base {
+	local ip=$1
+	local username=$2
+	local password=$3
+
+	echo "ip: ${ip}"
+	echo "un: ${username}"
+	echo "pw: ${password}"
+
+	sshpass -p ${password} ssh -o  ServerAliveInterval=60 -o StrictHostKeyChecking=no ${username}@${ip}
+}
+
+function rcv_base {
+	local ip=$1
+	local username=$2
+	local password=$3
+	local target=$4
+	local dir=$5
+
+	echo "ip : ${ip}"
+	echo "usr: ${username}"
+	echo "pwd: ${password}"
+	echo "get: ${target}"
+	echo "dst: ${dir}"
+
+	sshpass -p ${password} scp -r -o  ServerAliveInterval=60 -o StrictHostKeyChecking=no ${username}@${ip}:${target} ${dir}
+}
+
+function send_base {
+	local ip=$1
+	local username=$2
+	local password=$3
+	local target=$4
+	local dir=$5
+
+	echo "ip : ${ip}"
+	echo "usr: ${username}"
+	echo "pwd: ${password}"
+	echo "snd: ${target}"
+	echo "dst: ${dir}"
+
+	sshpass -p ${password} scp -r -o  ServerAliveInterval=60 -o StrictHostKeyChecking=no ${target} ${username}@${ip}:${dir}
+}
+
+function flash_base {
+	local rootfs=$1
+	local boot=$2
+
+	echo "rtfs: ${rootfs}"
+	echo "boot: ${boot}"
+	echo
+
+	gunzip ${rootfs}.gz
+	sudo fastboot devices
+	sudo fastboot flash boot ${boot}
+	sudo fastboot flash rootfs ${rootfs}
+}
+
+#machines
+
+#ssh
+#alias sfr='ssh_base 192.168.6.141 user 123456'
+
+#scp
+#alias rif='rcv_base 192.168.6.141 user 123456 /home/user/projects/yocto_fr/out/tmp-rpb-glibc/deploy/images/dragonboard-410c/ .'
+
+#bashrc accessors
+alias chb='vi ~/.bashrc'
+alias synb='source ~/.bashrc'
+
+#capacity of each dir
+alias cap='du -h | sort -rh > space'
+
+#flash
+#alias dbf='flash_base rpb-console-image-dragonboard-410c.ext4 boot-dragonboard-410c.img'
+
+#compilation and build
