@@ -1,6 +1,6 @@
 [user]
-	email = ramon.fried@gmail.com
-	name = Ramon Fried
+	email = noam.chen@tandemg.com
+	name = Noam Chen
 [color]
 	ui = true
 [core]
@@ -42,7 +42,8 @@
 
 [include]
 #	path = .gitconfig_gmail
-	path = .gitconfig_intel
+#	path = .gitconfig_ac
+	path = .gitconfig_tg
 
 [color "diff-highlight"]
 	oldNormal = red bold

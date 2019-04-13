@@ -1,0 +1,12 @@
+[user]
+    email = noam.chen@audiocodes.com
+
+[sendemail]
+    smtpencryption = tls
+    smtpserver = smtp.office365.com
+    smtpuser = noam.chen@audiocodes.com
+    smtpserverport = 587
+
+[include]
+    path = ~/.ac_password
+

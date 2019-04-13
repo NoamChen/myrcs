@@ -1,0 +1,12 @@
+[user]
+    email = noam.chen@tandemg.com
+
+[sendemail]
+    smtpencryption = tls
+    smtpserver = smtp.office365.com
+    smtpuser = noam.chen@tandemg.com
+    smtpserverport = 587
+
+[include]
+    path = ~/.tg_password
+
