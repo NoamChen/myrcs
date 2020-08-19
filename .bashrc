@@ -146,6 +146,7 @@ fi
 
 #path variable
 export PATH=~/bin:$PATH
+export PATH=/usr/local/pulse/:$PATH
 
 function cgrep()
 {
@@ -209,6 +210,13 @@ alias whatsmyip='curl -s http://whatismyip.akamai.com/'
 alias apt-upgrade='sudo apt-get update && sudo apt-get upgrade --yes  && sudo apt-get auto-remove'
 
 
+REVIEWER=idan.kahlon@tandemg.com
+#BRANCH=feature/IppPairedAudioDevice
+#BRANCH=private/dspg_sdk_280
+BRANCH=master
+KBRANCH=4.9.160_2.8.0-rc2
+ABRANCH=audc-rk3399
+
 #git aliases
 alias gis='git status '
 alias gia='git add '
@@ -223,6 +231,18 @@ alias gil="git log --pretty=format:'%h %ad | %s%d [%an]' --date=short"
 alias gica='git commit --amend'
 alias gir='git rebase -i'
 alias girc='git rebase --continue'
+
+#specific
+alias gsm='git checkout remotes/origin/master -B master'
+alias gpm='git push origin HEAD:refs/for/master'
+alias gpmr='git push origin HEAD:refs/for/master%r=$REVIEWER'
+alias gpbr='git push origin HEAD:refs/for/$BRANCH%r=$REVIEWER'
+alias gpk='git push origin HEAD:refs/for/$KBRANCH%r=$REVIEWER'
+alias gpa='git push aclgit HEAD:refs/for/$ABRANCH%r=$REVIEWER'
+
+#repo
+alias rei='repo init -u ssh://noamc@gerrit:29418/IPP/Android/repo_manifests  -b master'
+alias res='repo sync -c --no-tags --no-clone-bundle -j16'
 
 #checkpatch
 alias chk='~/bin/checkpatch.pl --notree'
@@ -288,6 +308,71 @@ function flash_base {
 }
 
 #machines
+AC_SERVER=10.1.1.78
+AC_CENTOS_VM=192.168.6.115
+AC_CENTOS_VMIDAN=192.168.6.105
+AC_CENTOS_EGOR=192.168.6.164
+AC_UBUNTU_VMIDN=192.168.6.131
+
+#user
+U_DEFAULT=user
+U_AC_DEVICES=admin
+U_AC_NOAM=noamc
+U_AC_IDAN=idank
+
+#pass
+P_DEFAULT=123456
+P_AC_DEVICES=1234
+P_AC_NOAM=q1w2e3A!
+P_AC_IDAN=Tip515
+
+#ssh
+alias casi='ssh_base $AC_SERVER $U_AC_IDAN $P_AC_IDAN'
+alias cas='ssh_base $AC_SERVER $U_AC_NOAM $P_AC_NOAM'
+alias cac='ssh_base $AC_CENTOS_VM $U_AC_DEVICES $P_AC_DEVICES'
+alias cace='ssh_base $AC_CENTOS_EGOR $U_AC_DEVICES $P_AC_DEVICES'
+alias cuv='ssh_base $AC_UBUNTU_VMIDN $U_AC_IDAN $P_DEFAULT'
+alias cvm='ssh_base $AC_CENTOS_VMIDAN $U_AC_DEVICES $P_AC_DEVICES'
+
+#ssh x11
+alias cacx='echo pass: $P_AC_DEVICES; ssh $U_AC_DEVICES@$AC_CENTOS_VM -X'
+alias cacex='echo pass: $P_AC_DEVICES ; ssh $U_AC_DEVICES@$AC_CENTOS_EGOR -X'
+
+
+#alias sfr='ssh_base 192.168.6.141 user 123456'
+
+#scp
+#alias rif='rcv_base 192.168.6.141 user 123456 /home/user/projects/yocto_fr/out/tmp-rpb-glibc/deploy/images/dragonboard-410c/ .'
+alias sac='send_base $AC_CENTOS_VM $U_AC_DEVICES $P_AC_DEVICES '
+
+#receive
+alias tace='rcv_base AC_CENTOS_EGOR $U_AC_DEVICES $P_AC_DEVICES '
+
+#sshfs
+alias umnt='fusermount -uz ~/projects/audiocodes/server_out'
+alias masi='echo pass: $P_AC_IDAN ; sshfs -o nonempty -o allow_other $U_AC_IDAN@$AC_SERVER:/home/local/AUDIOCODES/idank/out ~/projects/audiocodes/server_idan'
+alias mas='echo pass: $P_AC_NOAM; sshfs -o nonempty -o allow_other $U_AC_NOAM@$AC_SERVER:/home/local/AUDIOCODES/noamc/out ~/projects/audiocodes/server_out'
+alias mac='echo pass: $P_AC_DEVICES; sshfs -o nonempty -o allow_other $U_AC_DEVICES@$AC_CENTOS_VM:/home/admin/Shared ~/projects/audiocodes/build'
+alias mace='echo pass: $P_AC_DEVICES; sshfs -o nonempty -o allow_other $U_AC_DEVICES@$AC_CENTOS_EGOR:/home/admin/ ~/projects/audiocodes/egor'
+alias mvm='echo pass: $P_AC_DEVICES; sshfs -o nonempty -o allow_other $U_AC_DEVICES@$AC_CENTOS_VMIDAN:/home/admin/Shared ~/projects/audiocodes/vmidan'
+alias mua='echo pass: $P_DEFAULT; sshfs -o nonempty -o allow_other $U_DEFAULT@$AC_UBUNTU:/home/user/out ~/projects/audiocodes/ubuntu_out'
+
+#bashrc accessors
+alias chb='vi ~/.bashrc'
+alias synb='source ~/.bashrc'
+
+#capacity of each dir
+alias cap='du -h | sort -rh > space'
+
+#flash
+#alias dbf='flash_base rpb-console-image-dragonboard-410c.ext4 boot-dragonboard-410c.img'
+
+#compilation and build
+#android
+alias cda='cd ~/ac_env/android'
+alias bes='cd ~/ac_env/android ; source build/envsetup.sh ; cd -'
+alias lru='cd ~/ac_env/android ; lunch rxv80-userdebug ; cd -'
+alias bld='cd ~/ac_env/android ; ./build/tools/make.sh || cd -'
 
 #ssh
 #alias sfr='ssh_base 192.168.6.141 user 123456'
@@ -305,4 +390,9 @@ alias cap='du -h | sort -rh > space'
 #flash
 #alias dbf='flash_base rpb-console-image-dragonboard-410c.ext4 boot-dragonboard-410c.img'
 
-#compilation and build
+#debug
+alias gdb445='/opt/dspg/v1.3.5-rc3/sysroots/x86_64-dspg-linux/usr/bin/arm-dspg-linux-uclibceabi/arm-dspg-linux-uclibceabi-gdb'
+alias gdb280='/opt/dspg/v2.8.0-rc2/sysroots/x86_64-dspg-linux/usr/bin/arm-dspg-linux-gnueabi/arm-dspg-linux-gnueabi-gdb'
+alias gdbc450='/opt/dspg/v2.4.0-rc3/sysroots/x86_64-dspg-linux/usr/bin/arm-dspg-linux-uclibceabi/arm-dspg-linux-uclibceabi-gdb'
+alias gdb450='/opt/ipp_toolchain/mipselgcc4.4_24kc/usr/bin/mipsel-buildroot-linux-uclibc-gdb'
+alias gdb280='/opt/dspg/v2.8.0-rc2/sysroots/x86_64-dspg-linux/usr/bin/arm-dspg-linux-gnueabi/arm-dspg-linux-gnueabi-gdb'
